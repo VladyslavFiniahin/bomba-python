@@ -1,29 +1,22 @@
 class OldLogger:
-    def log(self, message: str):
+    def log(self, message):
         print(f"OldLogger: {message}")
 
 class NewLogger:
-    def write_log(self, msg: str):
-        print(f"NewLogger: {msg}")
+    def write_log(self, message):
+        print(f"NewLogger: {message}")
 
 class LoggerAdapter:
-    def __init__(self, logger):
-        self._logger = logger
-
-    def log(self, message: str):
-
-        if hasattr(self._logger, 'write_log'):
-            self._logger.write_log(message)
-        elif hasattr(self._logger, 'log'):
-            self._logger.log(message)
-        else:
-            print("Логер не підтримує методів log або write_log.")
+    def __init__(self, new_logger):
+        self._new_logger = new_logger
+    
+    def log(self, message):
+        self._new_logger.write_log(message)
 
 if __name__ == "__main__":
+    old_logger = OldLogger()
+    old_logger.log("Повідомлення через OldLogger")
+
     new_logger = NewLogger()
     adapter = LoggerAdapter(new_logger)
-    adapter.log("Повідомлення через адаптер (NewLogger)")
-
-    old_logger = OldLogger()
-    adapter = LoggerAdapter(old_logger)
-    adapter.log("Повідомлення через адаптер (OldLogger)")
+    adapter.log("Повідомлення через NewLogger")
